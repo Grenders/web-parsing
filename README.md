@@ -1,7 +1,7 @@
 ## Web Scraping Project
 
 ## Overview
-This project is designed to scrape data about tablets from Webscraper.io. The script extracts information such as title, description, price, star rating, number of reviews, and images, saving the data to a CSV file (results.csv) and a PostgreSQL database (table tablets in database scraping_db).
+This project is designed to scrape data about tablets from Webscraper.io. The script extracts information such as title, description, price, star rating, number of reviews, and images, saving the data to a CSV file (results.csv) and a PostgreSQL database.
 
 ## Key Features
 - Scrapes data using Selenium and BeautifulSoup.
