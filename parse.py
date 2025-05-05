@@ -1,5 +1,6 @@
 import logging
 import sys
+import random
 from decimal import Decimal
 from urllib.parse import urljoin
 from selenium import webdriver
@@ -7,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from sqlalchemy.dialects.postgresql import insert
 from webdriver_manager.chrome import ChromeDriverManager
 import csv
@@ -18,6 +20,14 @@ from sqlalchemy.exc import SQLAlchemyError
 
 MAIN_URL = "https://webscraper.io/"
 SCRAP_URL = urljoin(MAIN_URL, "test-sites/e-commerce/more/computers/tablets")
+
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15",
+]
 
 logging.basicConfig(
     level=logging.INFO,
@@ -40,6 +50,37 @@ class TabletsProduct:
 
 
 TABLES_FIELDS = [field.name for field in dataclasses.fields(TabletsProduct)]
+
+
+def get_random_user_agent() -> str:
+    """Return a random user agent from the USER_AGENTS list."""
+    return random.choice(USER_AGENTS)
+
+
+def configure_driver() -> webdriver.Chrome:
+    """Configure Chrome WebDriver with random user agent and custom headers."""
+    chrome_options = Options()
+    user_agent = get_random_user_agent()
+    chrome_options.add_argument(f"user-agent={user_agent}")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()), options=chrome_options
+    )
+    driver.execute_cdp_cmd(
+        "Network.setExtraHTTPHeaders",
+        {
+            "headers": {
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
+            }
+        },
+    )
+
+    logging.info(f"Using User-Agent: {user_agent}")
+    return driver
 
 
 def get_more_in_pages(driver: webdriver) -> None:
@@ -148,7 +189,7 @@ def save_to_db(tablets: [TabletsProduct]) -> None:
 
 
 def main():
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver = configure_driver()
     try:
         tablets = get_tablets_page_products(driver)
         write_tablets_csv(tablets)
