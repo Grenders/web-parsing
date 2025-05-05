@@ -31,7 +31,7 @@ This project is designed to scrape data about tablets from Webscraper.io. The sc
 
 1. Clone the repository:
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/Grenders/web-parsing.git
 
 2. Install Poetry:
    ```bash

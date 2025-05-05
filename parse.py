@@ -1,6 +1,8 @@
 import logging
 import sys
 import random
+import csv
+import dataclasses
 from decimal import Decimal
 from urllib.parse import urljoin
 from selenium import webdriver
@@ -11,8 +13,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from sqlalchemy.dialects.postgresql import insert
 from webdriver_manager.chrome import ChromeDriverManager
-import csv
-import dataclasses
 from bs4 import BeautifulSoup, Tag
 from db import SessionLocal
 from models import TabletProduct
