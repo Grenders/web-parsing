@@ -2,7 +2,7 @@
 name = "web-parsing"
 version = "0.1.0"
 description = "Web scraping/parsing project"
-authors = ["Your Name <you@example.com>"]
+authors = ["Grenders <any@example.com>"]
 license = "MIT"
 readme = "README.md"
 package-mode = false

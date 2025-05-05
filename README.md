@@ -20,8 +20,11 @@ This project is designed to scrape data about tablets from Webscraper.io. The sc
    ├── parser.log                # Execution log
    ├── requirements.txt          # Dependencies
    ├── results.csv               # Output CSV file
-   ├── .env                      # Environment variables
+   ├── .env.sample               # Environment variables
+   ├── pyproject.toml            # Main project configuration file
+   ├── poetry.lock               # Contains committed versions of all dependencies, including sub-dependencies
    └── README.md                 # Documentation
+   
    ```
 
 ## Installation
@@ -30,17 +33,19 @@ This project is designed to scrape data about tablets from Webscraper.io. The sc
    ```bash
    git clone <your-repo-url>
 
-2. Create a virtual environment and activate it:
+2. Install Poetry:
    ```bash
-   python -m venv venv
-   source venv/bin/activate (Linux/Mac)
-   venv\Scripts\activate ( Windows )
+   pip install poetry
 
 3. Install dependencies:
     ```bash
-   pip install -r requirements.txt
+   poetry install
 
-4. Create a .env file based on the .env.example file:
+4. Activate the virtual environment:
+    ```bash
+   poetry shell
+
+5. Create a .env file based on the .env.example file:
    ```bash
    cp .env.example .env
 
